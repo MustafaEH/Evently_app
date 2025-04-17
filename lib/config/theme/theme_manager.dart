@@ -29,6 +29,11 @@ class ThemeManager {
         color: ColorsManager.white,
         fontWeight: FontWeight.w600,
       ),
+      headlineMedium: GoogleFonts.inter(
+        color: ColorsManager.black,
+        fontSize: 22.sp,
+        fontWeight: FontWeight.w400,
+      ),
     ),
     iconTheme: IconThemeData(color: ColorsManager.grey),
     inputDecorationTheme: InputDecorationTheme(

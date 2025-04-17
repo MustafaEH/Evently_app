@@ -11,7 +11,7 @@ class RoutesManager {
       case signIn:
         return CupertinoPageRoute(builder: (context) => const SignIn());
       case signup:
-        return CupertinoPageRoute(builder: (context) => const SignUp());
+        return CupertinoPageRoute(builder: (context) =>  SignUp());
     }
   }
 }
