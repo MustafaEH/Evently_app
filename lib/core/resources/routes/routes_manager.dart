@@ -1,3 +1,4 @@
+import 'package:evently/authentication/reset_password/reset_password.dart';
 import 'package:evently/authentication/signIn/sign_in.dart';
 import 'package:evently/authentication/signUp/sign_up.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 class RoutesManager {
   static const String signup = '/signUp';
   static const String signIn = '/signIn';
+  static const String resetPassword = '/resetPassword';
 
   static Route? router(RouteSettings settings) {
     switch (settings.name) {
@@ -12,6 +14,8 @@ class RoutesManager {
         return CupertinoPageRoute(builder: (context) => const SignIn());
       case signup:
         return CupertinoPageRoute(builder: (context) =>  SignUp());
+      case resetPassword:
+        return CupertinoPageRoute(builder: (context) => const ResetPassword());
     }
   }
 }

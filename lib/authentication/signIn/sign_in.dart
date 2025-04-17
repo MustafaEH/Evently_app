@@ -1,3 +1,4 @@
+import 'package:evently/authentication/reset_password/reset_password.dart';
 import 'package:evently/authentication/widgets/custom_elevated_button.dart';
 import 'package:evently/authentication/widgets/custom_text_button.dart';
 import 'package:evently/authentication/widgets/custom_text_form_field.dart';
@@ -21,72 +22,77 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: REdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset(
-                AssetsManager.eventlyLogo,
-                width: 136.w,
-                height: 186.h,
-              ),
-              SizedBox(height: 24.h),
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    CustomTextFormField(
-                      prefixIcon: Icons.email,
-                      label: "Email",
-                    ),
-                    SizedBox(height: 16.h),
-                    CustomTextFormField(
-                      prefixIcon: Icons.lock,
-                      label: "Password",
-                      suffixIcon:
-                          !isSecure ? Icons.visibility : Icons.visibility_off,
-                      isSecure: isSecure,
-                      onTap: () {
-                        isSecure = !isSecure;
-                        setState(() {});
-                      },
-                    ),
-                    SizedBox(height: 16.h),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: CustomTextButton(
-                        title: "Forgot Password?",
-                        onClick: () {},
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Padding(
+            padding: REdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset(
+                  AssetsManager.eventlyLogo,
+                  width: 136.w,
+                  height: 186.h,
+                ),
+                SizedBox(height: 24.h),
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      CustomTextFormField(
+                        prefixIcon: Icons.email,
+                        label: "Email",
                       ),
-                    ),
-                    SizedBox(height: 24.h),
-                    CustomElevatedButton(text: "Login"),
-                    SizedBox(height: 24.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Don't Have Accont? ",
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                        CustomTextButton(
-                          title: "Create Account",
+                      SizedBox(height: 16.h),
+                      CustomTextFormField(
+                        prefixIcon: Icons.lock,
+                        label: "Password",
+                        suffixIcon:
+                            !isSecure ? Icons.visibility : Icons.visibility_off,
+                        isSecure: isSecure,
+                        onTap: () {
+                          isSecure = !isSecure;
+                          setState(() {});
+                        },
+                      ),
+                      SizedBox(height: 16.h),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: CustomTextButton(
+                          title: "Forgot Password?",
                           onClick: () {
-                            Navigator.pushNamed(context, RoutesManager.signup);
+                            Navigator.pushNamed(context, RoutesManager.resetPassword);
                           },
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 8.h),
-                    buildOrWidget(),
-                    SizedBox(height: 24.h),
-                    loginWithGoogle(),
-                  ],
+                      ),
+                      SizedBox(height: 24.h),
+                      CustomElevatedButton(text: "Login"),
+                      SizedBox(height: 24.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't Have Accont? ",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                          CustomTextButton(
+                            title: "Create Account",
+                            onClick: () {
+                              Navigator.pushNamed(context, RoutesManager.signup);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      buildOrWidget(),
+                      SizedBox(height: 24.h),
+                      loginWithGoogle(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

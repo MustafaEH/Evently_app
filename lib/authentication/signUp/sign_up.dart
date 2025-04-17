@@ -21,83 +21,87 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back),
-                  color: ColorsManager.black,
-                ),
-                SizedBox(width: 100.w),
-                Text(
-                  "Register",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ],
-            ),
-            SizedBox(height: 24.h),
-            Image.asset(AssetsManager.eventlyLogo, height: 160.h),
-            SizedBox(height: 24.h),
-            CustomTextFormField(label: "Name", prefixIcon: Icons.person),
-            SizedBox(height: 16.h),
-            CustomTextFormField(label: "Email", prefixIcon: Icons.email),
-            SizedBox(height: 16.h),
-            CustomTextFormField(
-              isSecure: widget.isSecurePass,
-              label: "Password",
-              prefixIcon: Icons.lock,
-              suffixIcon:
-                  !widget.isSecurePass
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-              onTap: () {
-                widget.isSecurePass = !widget.isSecurePass;
-                setState(() {});
-              },
-            ),
-            SizedBox(height: 16.h),
-            CustomTextFormField(
-              isSecure: widget.isSecureRePass,
-              label: "Re Password",
-              prefixIcon: Icons.lock,
-              suffixIcon:
-                  !widget.isSecureRePass
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-
-              onTap: () {
-                widget.isSecureRePass = !widget.isSecureRePass;
-                setState(() {});
-              },
-            ),
-            SizedBox(height: 16.h),
-            CustomElevatedButton(text: "Create Account"),
-            SizedBox(height: 16.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Already Have Account? ",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineMedium!.copyWith(fontSize: 16.sp),
-                ),
-                CustomTextButton(
-                  title: "Login",
-                  onClick: () {
-                    Navigator.pushNamed(context, RoutesManager.signIn);
-                  },
-                ),
-              ],
-            ),
-          ],
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back),
+                    color: ColorsManager.black,
+                    padding: EdgeInsets.zero,
+                  ),
+                  SizedBox(width: 100.w),
+                  Text(
+                    "Register",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h),
+              Image.asset(AssetsManager.eventlyLogo, height: 160.h),
+              SizedBox(height: 24.h),
+              CustomTextFormField(label: "Name", prefixIcon: Icons.person),
+              SizedBox(height: 16.h),
+              CustomTextFormField(label: "Email", prefixIcon: Icons.email),
+              SizedBox(height: 16.h),
+              CustomTextFormField(
+                isSecure: widget.isSecurePass,
+                label: "Password",
+                prefixIcon: Icons.lock,
+                suffixIcon:
+                    !widget.isSecurePass
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                onTap: () {
+                  widget.isSecurePass = !widget.isSecurePass;
+                  setState(() {});
+                },
+              ),
+              SizedBox(height: 16.h),
+              CustomTextFormField(
+                isSecure: widget.isSecureRePass,
+                label: "Re Password",
+                prefixIcon: Icons.lock,
+                suffixIcon:
+                    !widget.isSecureRePass
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+        
+                onTap: () {
+                  widget.isSecureRePass = !widget.isSecureRePass;
+                  setState(() {});
+                },
+              ),
+              SizedBox(height: 16.h),
+              CustomElevatedButton(text: "Create Account"),
+              SizedBox(height: 16.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already Have Account? ",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineMedium!.copyWith(fontSize: 16.sp),
+                  ),
+                  CustomTextButton(
+                    title: "Login",
+                    onClick: () {
+                      Navigator.pushNamed(context, RoutesManager.signIn);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
