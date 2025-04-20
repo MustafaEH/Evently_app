@@ -26,14 +26,23 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+      ),
       obscureText: widget.isSecure,
       decoration: InputDecoration(
         suffixIcon: IconButton(
           onPressed: widget.onTap,
           icon: Icon(widget.suffixIcon),
+          color: ColorsManager.grey,
         ),
-        prefixIcon: Icon(widget.prefixIcon),
+        prefixIcon: Icon(widget.prefixIcon, color: ColorsManager.grey),
         labelText: widget.label,
+        border: Theme.of(context).inputDecorationTheme.border,
+        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
       ),
     );
   }

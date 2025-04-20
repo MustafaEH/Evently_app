@@ -12,22 +12,26 @@ class ResetPassword extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
-        
           children: [
             Row(
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back),
-                  color: ColorsManager.black,
-                  padding: EdgeInsets.zero,
+                Expanded(
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back),
+                    color: ColorsManager.black,
+                    padding: EdgeInsets.zero,
+                  ),
                 ),
-                SizedBox(width: 80.w),
-                Text(
-                  "Forget Password",
-                  style: Theme.of(context).textTheme.headlineMedium,
+                // SizedBox(width: 80.w),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    "Forget Password",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ),
               ],
             ),
@@ -38,7 +42,9 @@ class ResetPassword extends StatelessWidget {
                 children: [
                   Image.asset(AssetsManager.resetPasswordLogo, height: 400.h),
                   SizedBox(height: 24.h),
-                  CustomElevatedButton(text: "Reset Password"),
+                  CustomElevatedButton(text: "Reset Password",onTap: () {
+
+                  },),
                 ],
               ),
             ),

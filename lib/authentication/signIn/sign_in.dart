@@ -1,4 +1,3 @@
-import 'package:evently/authentication/reset_password/reset_password.dart';
 import 'package:evently/authentication/widgets/custom_elevated_button.dart';
 import 'package:evently/authentication/widgets/custom_text_button.dart';
 import 'package:evently/authentication/widgets/custom_text_form_field.dart';
@@ -67,7 +66,9 @@ class _SignInState extends State<SignIn> {
                         ),
                       ),
                       SizedBox(height: 24.h),
-                      CustomElevatedButton(text: "Login"),
+                      CustomElevatedButton(text: "Login",onTap: () {
+                        Navigator.pushNamed(context, RoutesManager.mainLayout);
+                      },),
                       SizedBox(height: 24.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

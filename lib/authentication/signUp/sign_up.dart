@@ -46,7 +46,7 @@ class _SignUpState extends State<SignUp> {
                 ],
               ),
               SizedBox(height: 24.h),
-              Image.asset(AssetsManager.eventlyLogo, height: 160.h),
+              Image.asset(AssetsManager.eventlyLogo, height: 160.h,width: 160.w,),
               SizedBox(height: 24.h),
               CustomTextFormField(label: "Name", prefixIcon: Icons.person),
               SizedBox(height: 16.h),
@@ -74,14 +74,16 @@ class _SignUpState extends State<SignUp> {
                     !widget.isSecureRePass
                         ? Icons.visibility
                         : Icons.visibility_off,
-        
+
                 onTap: () {
                   widget.isSecureRePass = !widget.isSecureRePass;
                   setState(() {});
                 },
               ),
               SizedBox(height: 16.h),
-              CustomElevatedButton(text: "Create Account"),
+              CustomElevatedButton(text: "Create Account",onTap: () {
+
+              },),
               SizedBox(height: 16.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +97,7 @@ class _SignUpState extends State<SignUp> {
                   CustomTextButton(
                     title: "Login",
                     onClick: () {
-                      Navigator.pushNamed(context, RoutesManager.signIn);
+                      Navigator.pop(context);
                     },
                   ),
                 ],
