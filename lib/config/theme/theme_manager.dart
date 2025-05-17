@@ -5,39 +5,67 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ThemeManager {
   static final ThemeData light = ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: ColorsManager.light,primary: ColorsManager.light,primaryContainer: ColorsManager.white),
+    cardColor: ColorsManager.light,
+    cardTheme: CardTheme(
+      color: ColorsManager.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+    ),
     useMaterial3: false,
     scaffoldBackgroundColor: ColorsManager.light,
+    primaryColor: ColorsManager.blue,
+    tabBarTheme: TabBarTheme(
+      indicatorColor: Colors.transparent,
+      tabAlignment: TabAlignment.start,
+      labelStyle: TextStyle(color: ColorsManager.light),
+      unselectedLabelStyle: TextStyle(color: ColorsManager.blue),
+    ),
     textTheme: TextTheme(
-      labelSmall: GoogleFonts.inter(
+      labelSmall: TextStyle(
         color: ColorsManager.grey,
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
       ),
-      labelMedium: GoogleFonts.inter(
+      labelMedium: TextStyle(
         color: ColorsManager.blue,
         fontSize: 20.sp,
         fontWeight: FontWeight.w500,
       ),
-      titleSmall: GoogleFonts.inter(
+      titleSmall: TextStyle(
         color: ColorsManager.blue,
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
         decoration: TextDecoration.underline,
         decorationColor: ColorsManager.blue,
       ),
-      titleMedium: GoogleFonts.inter(
+      titleMedium: TextStyle(
         fontSize: 20.sp,
         color: ColorsManager.white,
         fontWeight: FontWeight.w600,
       ),
-      headlineMedium: GoogleFonts.inter(
+      headlineMedium: TextStyle(
         color: ColorsManager.black,
         fontSize: 22.sp,
         fontWeight: FontWeight.w400,
       ),
+      headlineSmall: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.normal,
+        color: ColorsManager.white,
+      ),
+      displaySmall: TextStyle(
+        fontSize: 16.sp,
+        color: ColorsManager.black,
+        fontWeight: FontWeight.w500,
+      ),
     ),
-    iconTheme: IconThemeData(color: ColorsManager.grey),
+    iconTheme: IconThemeData(color: ColorsManager.black),
     inputDecorationTheme: InputDecorationTheme(
+      hintStyle: TextStyle(
+        color: ColorsManager.grey,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+      ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16.r),
         borderSide: BorderSide(color: ColorsManager.grey, width: 1.w),
@@ -63,7 +91,6 @@ class ThemeManager {
         borderRadius: BorderRadius.circular(16.r),
         borderSide: BorderSide(color: ColorsManager.grey, width: 1.w),
       ),
-
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -78,11 +105,133 @@ class ThemeManager {
       backgroundColor: ColorsManager.blue,
       selectedItemColor: ColorsManager.white,
       unselectedItemColor: Colors.white38,
-      type: BottomNavigationBarType.fixed, // Keeps items aligned even if >3
-      selectedLabelStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500),
+      type: BottomNavigationBarType.fixed,
+      // Keeps items aligned even if >3
+      selectedLabelStyle: TextStyle(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w500,
+      ),
       unselectedLabelStyle: TextStyle(fontSize: 12.sp),
     ),
-
   );
-  static final ThemeData dark = ThemeData();
+  static final ThemeData dark = ThemeData(
+    appBarTheme: AppBarTheme(
+      iconTheme: IconThemeData(color: ColorsManager.blue),
+      backgroundColor: ColorsManager.dark,
+    ),
+    cardColor: ColorsManager.light,
+    cardTheme: CardTheme(
+      color: ColorsManager.dark,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+    ),
+    useMaterial3: false,
+    scaffoldBackgroundColor: ColorsManager.dark,
+    primaryColor: ColorsManager.dark,
+    colorScheme: ColorScheme.fromSeed(
+      primaryContainer: ColorsManager.blue,
+      seedColor: ColorsManager.blue,
+      primary: ColorsManager.blue,
+    ),
+    tabBarTheme: TabBarTheme(
+      indicatorColor: Colors.transparent,
+      tabAlignment: TabAlignment.start,
+      labelStyle: TextStyle(color: ColorsManager.light),
+      unselectedLabelStyle: TextStyle(color: ColorsManager.blue),
+    ),
+    textTheme: TextTheme(
+      labelSmall: TextStyle(
+        color: ColorsManager.grey,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      labelMedium: TextStyle(
+        color: ColorsManager.blue,
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: TextStyle(
+        color: ColorsManager.blue,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+        decoration: TextDecoration.underline,
+        decorationColor: ColorsManager.blue,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 20.sp,
+        color: ColorsManager.white,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineMedium: TextStyle(
+        color: ColorsManager.white,
+        fontSize: 22.sp,
+        fontWeight: FontWeight.w400,
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.normal,
+        color: ColorsManager.white,
+      ),
+      displaySmall: TextStyle(
+        fontSize: 16.sp,
+        color: ColorsManager.white,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+    iconTheme: IconThemeData(color: ColorsManager.white),
+    inputDecorationTheme: InputDecorationTheme(
+      prefixIconColor: ColorsManager.grey,
+      suffixIconColor: ColorsManager.grey,
+      hintStyle: TextStyle(
+        color: ColorsManager.grey,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        borderSide: BorderSide(color: ColorsManager.blue, width: 1.w),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        borderSide: BorderSide(color: ColorsManager.blue, width: 1.w),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        borderSide: BorderSide(color: ColorsManager.red, width: 1.w),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        borderSide: BorderSide(color: ColorsManager.blue, width: 1.w),
+      ),
+      labelStyle: GoogleFonts.inter(
+        color: ColorsManager.grey,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16.r),
+        borderSide: BorderSide(color: ColorsManager.grey, width: 1.w),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        padding: REdgeInsets.symmetric(vertical: 16),
+        backgroundColor: ColorsManager.blue,
+      ),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: ColorsManager.dark,
+      selectedItemColor: ColorsManager.white,
+      unselectedItemColor: Colors.white38,
+      type: BottomNavigationBarType.fixed,
+      // Keeps items aligned even if >3
+      selectedLabelStyle: TextStyle(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      unselectedLabelStyle: TextStyle(fontSize: 12.sp),
+    ),
+  );
 }

@@ -6,6 +6,8 @@ import 'package:evently/core/resources/colors_manager.dart';
 import 'package:evently/core/resources/routes/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -41,12 +43,12 @@ class _SignInState extends State<SignIn> {
                     children: [
                       CustomTextFormField(
                         prefixIcon: Icons.email,
-                        label: "Email",
+                        label: AppLocalizations.of(context)!.email,
                       ),
                       SizedBox(height: 16.h),
                       CustomTextFormField(
                         prefixIcon: Icons.lock,
-                        label: "Password",
+                        label: AppLocalizations.of(context)!.password,
                         suffixIcon:
                             !isSecure ? Icons.visibility : Icons.visibility_off,
                         isSecure: isSecure,
@@ -59,14 +61,14 @@ class _SignInState extends State<SignIn> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: CustomTextButton(
-                          title: "Forgot Password?",
+                          title: AppLocalizations.of(context)!.forget_password,
                           onClick: () {
                             Navigator.pushNamed(context, RoutesManager.resetPassword);
                           },
                         ),
                       ),
                       SizedBox(height: 24.h),
-                      CustomElevatedButton(text: "Login",onTap: () {
+                      CustomElevatedButton(text: AppLocalizations.of(context)!.login,onTap: () {
                         Navigator.pushNamed(context, RoutesManager.mainLayout);
                       },),
                       SizedBox(height: 24.h),
@@ -74,11 +76,11 @@ class _SignInState extends State<SignIn> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't Have Accont? ",
+                            AppLocalizations.of(context)!.dont_have_account,
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
                           CustomTextButton(
-                            title: "Create Account",
+                            title: AppLocalizations.of(context)!.create_account,
                             onClick: () {
                               Navigator.pushNamed(context, RoutesManager.signup);
                             },
@@ -103,15 +105,18 @@ class _SignInState extends State<SignIn> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Divider(
+        const Divider(
           thickness: 2,
           height: 1,
           color: ColorsManager.blue,
         ),
         Container(
-          color: ColorsManager.light,
+          color: Theme.of(context).colorScheme.primary,
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Text("Or"),
+          child: Text(AppLocalizations.of(context)!.or,style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
+          ),),
         ),
       ],
     );
@@ -140,7 +145,7 @@ class _SignInState extends State<SignIn> {
             ),
             SizedBox(width: 16.w),
             Text(
-              "Login With Google",
+              AppLocalizations.of(context)!.login_with_google,
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ],

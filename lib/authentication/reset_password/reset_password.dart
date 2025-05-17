@@ -3,6 +3,7 @@ import 'package:evently/core/resources/assets_manager.dart';
 import 'package:evently/core/resources/colors_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResetPassword extends StatelessWidget {
   const ResetPassword({super.key});
@@ -29,7 +30,7 @@ class ResetPassword extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    "Forget Password",
+                    AppLocalizations.of(context)!.forget_password,
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
@@ -42,7 +43,7 @@ class ResetPassword extends StatelessWidget {
                 children: [
                   Image.asset(AssetsManager.resetPasswordLogo, height: 400.h),
                   SizedBox(height: 24.h),
-                  CustomElevatedButton(text: "Reset Password",onTap: () {
+                  CustomElevatedButton(text: AppLocalizations.of(context)!.reset_password,onTap: () {
 
                   },),
                 ],
