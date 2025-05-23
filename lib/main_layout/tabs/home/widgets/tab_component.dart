@@ -1,4 +1,6 @@
-import 'package:evently/dm/category.dart';
+
+import 'package:evently/core/resources/constant_manager.dart';
+import 'package:evently/data/dm/category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,6 +12,7 @@ class CustomTabBar extends StatefulWidget {
     required this.unSelectedTabBgColor,
     required this.selectedTabContentColor,
     required this.unSelectedTabContentColor,
+    required this.onCategoryItemClicked,
   });
 
   final List<CategoryDM> categories;
@@ -17,6 +20,7 @@ class CustomTabBar extends StatefulWidget {
   final Color unSelectedTabBgColor;
   final Color selectedTabContentColor;
   final Color unSelectedTabContentColor;
+  final void Function(CategoryDM selectedCategory) onCategoryItemClicked;
 
   @override
   State<CustomTabBar> createState() => _CustomTabBarState();
@@ -30,11 +34,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
     return DefaultTabController(
       length: widget.categories.length,
       child: TabBar(
-        onTap: (newIndex) {
-          setState(() {
-            currentIndex = newIndex;
-          });
-        },
+        onTap: onCategoryClicked,
         indicatorColor: Colors.transparent,
         isScrollable: true,
         tabAlignment: TabAlignment.start,
@@ -94,5 +94,13 @@ class _CustomTabBarState extends State<CustomTabBar> {
         ],
       ),
     );
+  }
+
+  void onCategoryClicked(int newIndex) {
+    widget.onCategoryItemClicked(ConstantManager.categories[newIndex]);
+    currentIndex = newIndex;
+    setState(() {
+
+    });
   }
 }

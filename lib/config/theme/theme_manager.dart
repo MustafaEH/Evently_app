@@ -5,7 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ThemeManager {
   static final ThemeData light = ThemeData(
-    colorScheme: ColorScheme.fromSeed(seedColor: ColorsManager.light,primary: ColorsManager.light,primaryContainer: ColorsManager.white),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: ColorsManager.light,
+      primary: ColorsManager.light,
+      primaryContainer: ColorsManager.white,
+    ),
     cardColor: ColorsManager.light,
     cardTheme: CardTheme(
       color: ColorsManager.white,
@@ -14,6 +18,13 @@ class ThemeManager {
     useMaterial3: false,
     scaffoldBackgroundColor: ColorsManager.light,
     primaryColor: ColorsManager.blue,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: ColorsManager.blue,
+        textStyle: const TextStyle(fontWeight: FontWeight.w600),
+      ),
+    ),
+
     tabBarTheme: TabBarTheme(
       indicatorColor: Colors.transparent,
       tabAlignment: TabAlignment.start,
@@ -112,6 +123,18 @@ class ThemeManager {
         fontWeight: FontWeight.w500,
       ),
       unselectedLabelStyle: TextStyle(fontSize: 12.sp),
+    ),
+
+    timePickerTheme: TimePickerThemeData(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      hourMinuteColor: ColorsManager.blue.withOpacity(0.1),
+      hourMinuteTextColor: ColorsManager.blue,
+      dialBackgroundColor: Colors.grey.shade100,
+      dialHandColor: ColorsManager.blue,
+      entryModeIconColor: ColorsManager.blue,
+      dayPeriodColor: Colors.grey.shade200,
+      dayPeriodTextColor: ColorsManager.blue,
     ),
   );
   static final ThemeData dark = ThemeData(

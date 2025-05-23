@@ -1,15 +1,23 @@
-import 'package:evently/core/resources/assets_manager.dart';
 import 'package:evently/core/resources/colors_manager.dart';
 import 'package:evently/core/resources/constant_manager.dart';
-import 'package:evently/dm/eventDM.dart';
+import 'package:evently/data/dm/category.dart';
+import 'package:evently/data/dm/eventDM.dart';
+import 'package:evently/data/firebase_service/firebase_service.dart';
 import 'package:evently/main_layout/tabs/home/widgets/event_component.dart';
 import 'package:evently/main_layout/tabs/home/widgets/tab_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Home extends StatefulWidget {
+  Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  CategoryDM category = ConstantManager.categoriesWithAll[0];
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,11 @@ class Home extends StatelessWidget {
                   ),
                   SizedBox(height: 8.h),
                   CustomTabBar(
+                    onCategoryItemClicked: (selectedCategory) {
+                      category = selectedCategory;
+                      setState(() {});
+                    },
+
                     categories: ConstantManager.categoriesWithAll,
                     selectedTabBgColor: ColorsManager.light,
                     unSelectedTabBgColor: Colors.transparent,
@@ -63,21 +76,25 @@ class Home extends StatelessWidget {
             ),
           ),
         ),
-
         Expanded(
-          child: ListView.builder(
-            itemBuilder:
-                (context, index) => EventComponent(
-                  event: EventDM(
-                    title: "EVENT",
-                    description: "desc",
-                    Category: "birthDay",
-                    imagePath: AssetsManager.birthDay,
-                    date: DateTime.now(),
-                    time: DateTime.now(),
-                  ),
-                ),
-            itemCount: 10,
+          child: StreamBuilder(
+            stream: FirebaseService.getEventsRealTime(category),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.blue),
+                );
+              }
+              if (snapshot.hasError) {
+                Text(snapshot.error.toString());
+              }
+              List<EventDM> events = snapshot.data!;
+              return ListView.builder(
+                itemBuilder:
+                    (context, index) => EventComponent(event: events[index]),
+                itemCount: events.length,
+              );
+            },
           ),
         ),
       ],

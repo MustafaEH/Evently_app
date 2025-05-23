@@ -6,13 +6,17 @@ class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
     super.key,
     this.label,
-     this.prefixIcon,
+    this.prefixIcon,
     this.suffixIcon,
     this.onTap,
     this.isSecure = false,
-    this.hint,  this.lines = 1,
+    this.hint,
+    this.lines = 1,
+    this.controller,
+    this.validator,
   });
 
+  final TextEditingController? controller;
   final String? label;
   final String? hint;
   final IconData? prefixIcon;
@@ -20,10 +24,13 @@ class CustomTextFormField extends StatelessWidget {
   final void Function()? onTap;
   bool isSecure;
   final int lines;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: validator,
+      controller: controller,
       maxLines: lines,
       minLines: lines,
       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -38,7 +45,10 @@ class CustomTextFormField extends StatelessWidget {
           icon: Icon(suffixIcon),
           color: ColorsManager.grey,
         ),
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: ColorsManager.grey) : null,
+        prefixIcon:
+            prefixIcon != null
+                ? Icon(prefixIcon, color: ColorsManager.grey)
+                : null,
         labelText: label,
         border: Theme.of(context).inputDecorationTheme.border,
         enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,

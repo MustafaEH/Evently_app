@@ -4,7 +4,7 @@ class ConfigProvider extends ChangeNotifier {
   ThemeMode currentTheme = ThemeMode.light;
   String currentLanguage = "en";
 
-  bool get isDarkMode => currentTheme == ThemeMode.dark;
+  // bool get isDarkMode => currentTheme == ThemeMode.dark;
   bool get isLightMode => currentTheme == ThemeMode.light;
 
   bool get isEnglish => currentLanguage == "en";
