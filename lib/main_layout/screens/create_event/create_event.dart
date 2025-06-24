@@ -164,7 +164,7 @@ class _CreateEventState extends State<CreateEvent> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     TextButton(
                       onPressed: _selectEventTime,
                       child: Text(
@@ -183,6 +183,7 @@ class _CreateEventState extends State<CreateEvent> {
                     onTap: createEvent,
                   ),
                 ),
+                SizedBox(height: 16.h),
               ],
             ),
           ),
@@ -212,12 +213,12 @@ class _CreateEventState extends State<CreateEvent> {
     );
     await FirebaseService.addEventToFireStore(event);
     Navigator.pop(context);
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     backgroundColor: ColorsManager.black,
-    //     content: Text("Event Created Successfully"),
-    //   ),
-    // );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ColorsManager.black,
+        content: Text("Event Created Successfully"),
+      ),
+    );
   }
 
   void _selectEventDate() async {

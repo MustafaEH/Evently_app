@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/data/dm/category.dart';
 import 'package:evently/data/dm/eventDM.dart';
+import 'package:evently/data/dm/userDM.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {
   static CollectionReference<EventDM> getEventsCollection() {
@@ -41,11 +43,66 @@ class FirebaseService {
   static Stream<List<EventDM>> getEventsRealTime(CategoryDM category) async* {
     CollectionReference<EventDM> eventsCollection = getEventsCollection();
     Stream<QuerySnapshot<EventDM>> eventDocSnapshotStream =
-        eventsCollection.orderBy("date").snapshots();
+        eventsCollection
+            .orderBy("date")
+            .where(
+              "categoryId",
+              isEqualTo: category.id == "1" ? null : category.id,
+            )
+            .snapshots();
     var eventsList = eventDocSnapshotStream.map(
       (event) => event.docs.map((docSnapshot) => docSnapshot.data()).toList(),
     );
 
     yield* eventsList;
+  }
+
+  static Future<void> registerUser({
+    required String emailAddress,
+    required String password,
+    required String name,
+  }) async {
+    final UserCredential credential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: emailAddress,
+          password: password,
+        );
+    UserDm user = UserDm(
+      name: name,
+      id: credential.user!.uid,
+      email: emailAddress,
+      favouriteEventsIds: [],
+    );
+    addUserToFireStore(user);
+  }
+
+  static Future<void> login(String email, String password) async {
+    UserCredential credential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    UserDm userDm= await getUserFromFireStore(credential.user!.uid);
+    UserDm.currentUser = userDm;
+  }
+
+  static getUserCollection() {
+    FirebaseFirestore dp = FirebaseFirestore.instance;
+    CollectionReference<UserDm> userCollection = dp
+        .collection("users")
+        .withConverter<UserDm>(
+          fromFirestore:
+              (snapshot, options) => UserDm.fromJson(snapshot.data()!),
+          toFirestore: (user, options) => user.toJson(),
+        );
+    return userCollection;
+  }
+
+  static Future<void> addUserToFireStore(UserDm user) {
+    var userCollection = getUserCollection();
+    return userCollection.doc(user.id).set(user);
+  }
+
+  static Future<UserDm> getUserFromFireStore(String uid) async {
+    var userCollection = getUserCollection();
+    var userDoc = await userCollection.doc(uid).get();
+    return userDoc.data()!;
   }
 }

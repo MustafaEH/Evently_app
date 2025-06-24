@@ -2,6 +2,7 @@ import 'package:evently/core/resources/colors_manager.dart';
 import 'package:evently/core/resources/constant_manager.dart';
 import 'package:evently/data/dm/category.dart';
 import 'package:evently/data/dm/eventDM.dart';
+import 'package:evently/data/dm/userDM.dart';
 import 'package:evently/data/firebase_service/firebase_service.dart';
 import 'package:evently/main_layout/tabs/home/widgets/event_component.dart';
 import 'package:evently/main_layout/tabs/home/widgets/tab_component.dart';
@@ -14,6 +15,7 @@ class Home extends StatefulWidget {
 
   @override
   State<Home> createState() => _HomeState();
+  List<EventDM> events = [];
 }
 
 class _HomeState extends State<Home> {
@@ -39,7 +41,7 @@ class _HomeState extends State<Home> {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   Text(
-                    "Mustafa Ehab",
+                    UserDm.currentUser!.name,
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.w500,
@@ -76,26 +78,26 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        Expanded(
-          child: StreamBuilder(
-            stream: FirebaseService.getEventsRealTime(category),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.blue),
-                );
-              }
-              if (snapshot.hasError) {
-                Text(snapshot.error.toString());
-              }
-              List<EventDM> events = snapshot.data!;
-              return ListView.builder(
+        StreamBuilder(
+          stream: FirebaseService.getEventsRealTime(category),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.blue),
+              );
+            }
+            if (snapshot.hasError) {
+              Text(snapshot.error.toString());
+            }
+            List<EventDM> events = snapshot.data ?? [];
+            return Expanded(
+              child: ListView.builder(
                 itemBuilder:
                     (context, index) => EventComponent(event: events[index]),
                 itemCount: events.length,
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ],
     );

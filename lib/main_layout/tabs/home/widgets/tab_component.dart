@@ -97,7 +97,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
   }
 
   void onCategoryClicked(int newIndex) {
-    widget.onCategoryItemClicked(ConstantManager.categories[newIndex]);
+    widget.onCategoryItemClicked(widget.categories[newIndex]);
     currentIndex = newIndex;
     setState(() {
 

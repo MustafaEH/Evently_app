@@ -3,6 +3,10 @@ import 'package:evently/authentication/widgets/custom_text_button.dart';
 import 'package:evently/authentication/widgets/custom_text_form_field.dart';
 import 'package:evently/core/resources/assets_manager.dart';
 import 'package:evently/core/resources/colors_manager.dart';
+import 'package:evently/core/resources/dialog_utils.dart';
+import 'package:evently/core/resources/routes/routes_manager.dart';
+import 'package:evently/data/firebase_service/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,14 +14,38 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SignUp extends StatefulWidget {
   SignUp({super.key});
 
-  bool isSecureRePass = true;
-  bool isSecurePass = true;
-
   @override
   State<SignUp> createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
+  bool isSecureRePass = true;
+  bool isSecurePass = true;
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController rePasswordController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    rePasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    rePasswordController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,47 +81,47 @@ class _SignUpState extends State<SignUp> {
               ),
               SizedBox(height: 24.h),
               CustomTextFormField(
+                controller: nameController,
                 label: AppLocalizations.of(context)!.name,
                 prefixIcon: Icons.person,
               ),
               SizedBox(height: 16.h),
               CustomTextFormField(
+                controller: emailController,
                 label: AppLocalizations.of(context)!.email,
                 prefixIcon: Icons.email,
               ),
               SizedBox(height: 16.h),
               CustomTextFormField(
-                isSecure: widget.isSecurePass,
+                controller: passwordController,
+                isSecure: isSecurePass,
                 label: AppLocalizations.of(context)!.password,
                 prefixIcon: Icons.lock,
                 suffixIcon:
-                    !widget.isSecurePass
-                        ? Icons.visibility
-                        : Icons.visibility_off,
+                    !isSecurePass ? Icons.visibility : Icons.visibility_off,
                 onTap: () {
-                  widget.isSecurePass = !widget.isSecurePass;
+                  isSecurePass = !isSecurePass;
                   setState(() {});
                 },
               ),
               SizedBox(height: 16.h),
               CustomTextFormField(
-                isSecure: widget.isSecureRePass,
+                controller: rePasswordController,
+                isSecure: isSecureRePass,
                 label: AppLocalizations.of(context)!.re_password,
                 prefixIcon: Icons.lock,
                 suffixIcon:
-                    !widget.isSecureRePass
-                        ? Icons.visibility
-                        : Icons.visibility_off,
+                    !isSecureRePass ? Icons.visibility : Icons.visibility_off,
 
                 onTap: () {
-                  widget.isSecureRePass = !widget.isSecureRePass;
+                  isSecureRePass = !isSecureRePass;
                   setState(() {});
                 },
               ),
               SizedBox(height: 16.h),
               CustomElevatedButton(
                 text: AppLocalizations.of(context)!.create_account,
-                onTap: () {},
+                onTap: createAccount,
               ),
               SizedBox(height: 16.h),
               Row(
@@ -116,5 +144,46 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  void createAccount() async {
+    try {
+      DialogUtils.showLoadingDialog("Registering", context);
+      await FirebaseService.registerUser(
+        name: nameController.text,
+        emailAddress: emailController.text,
+        password: passwordController.text,
+      );
+      DialogUtils.hideDialog(context);
+      DialogUtils.showDialogWithMessage(
+        context,
+        message: "Successfully Registered",
+        posAction: () {
+          Navigator.pushReplacementNamed(context, RoutesManager.signIn);
+        },
+        positiveActionText: "OK",
+      );
+    } on FirebaseAuthException catch (e) {
+      DialogUtils.hideDialog(context);
+      if (e.code == 'weak-password') {
+        DialogUtils.showDialogWithMessage(
+          context,
+          message: 'The password provided is too weak.',
+        );
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        DialogUtils.showDialogWithMessage(
+          context,
+          message: 'The account already exists for that email.',
+          positiveActionText: "Try Again",
+          posAction: () {
+            DialogUtils.hideDialog(context);
+          },
+        );
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

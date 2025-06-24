@@ -1,5 +1,6 @@
 import 'package:evently/core/resources/assets_manager.dart';
 import 'package:evently/core/resources/colors_manager.dart';
+import 'package:evently/data/dm/userDM.dart';
 import 'package:evently/main_layout/tabs/profile/widgets/customDropDown.dart';
 import 'package:evently/providers/config_provider.dart';
 import 'package:flutter/material.dart';
@@ -42,12 +43,12 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Mustafa Ehab",
+                        UserDm.currentUser!.name,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(height: 16),
                       Text(
-                        "mustafaehab060@gmail.com",
+                        UserDm.currentUser!.email,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ],
