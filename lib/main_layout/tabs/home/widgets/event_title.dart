@@ -1,11 +1,13 @@
 import 'package:evently/core/resources/colors_manager.dart';
+import 'package:evently/data/firebase_service/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventTitle extends StatelessWidget {
-  const EventTitle({super.key, required this.title});
+  const EventTitle({super.key, required this.title, required this.eventId});
 
   final String title;
+  final String eventId;
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +24,20 @@ class EventTitle extends StatelessWidget {
               ),
             ),
             Spacer(),
-            Icon(Icons.favorite, color: ColorsManager.blue),
+            IconButton(
+              onPressed: () {
+                addEventToFav();
+              },
+              icon: Icon(Icons.favorite_outline),
+              color: ColorsManager.blue,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void addEventToFav() async {
+    await FirebaseService.addEventToFav(eventId);
   }
 }

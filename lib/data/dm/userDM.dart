@@ -1,10 +1,8 @@
-import 'package:evently/data/dm/eventDM.dart';
-
 class UserDm {
   String name;
   String id;
   String email;
-  List<EventDM> favouriteEventsIds;
+  List<String> favouriteEventsIds;
   static UserDm? currentUser;
 
   UserDm({
@@ -15,13 +13,10 @@ class UserDm {
   });
 
   UserDm.fromJson(Map<String, dynamic> json)
-    : name = json["name"],
-      id = json["id"],
-      email = json["email"],
-      favouriteEventsIds =
-          (json["favouriteEventsIds"] as List)
-              .map((e) => EventDM.fromJson(e))
-              .toList();
+      : name = json["name"],
+        id = json["id"],
+        email = json["email"],
+        favouriteEventsIds = List<String>.from(json["favouriteEventsIds"] ?? []);
 
   Map<String, dynamic> toJson() => {
     "name": name,
@@ -29,5 +24,4 @@ class UserDm {
     "email": email,
     "favouriteEventsIds": favouriteEventsIds,
   };
-
 }

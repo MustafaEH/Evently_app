@@ -57,6 +57,13 @@ class FirebaseService {
     yield* eventsList;
   }
 
+  static Future<void> addEventToFav(String eventId) {
+    UserDm currentUser = UserDm.currentUser!;
+    currentUser.favouriteEventsIds.add(eventId);
+    var usersCollection = getUserCollection();
+    return usersCollection.doc(currentUser.id).set(currentUser);
+  }
+
   static Future<void> registerUser({
     required String emailAddress,
     required String password,
@@ -79,7 +86,7 @@ class FirebaseService {
   static Future<void> login(String email, String password) async {
     UserCredential credential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
-    UserDm userDm= await getUserFromFireStore(credential.user!.uid);
+    UserDm userDm = await getUserFromFireStore(credential.user!.uid);
     UserDm.currentUser = userDm;
   }
 
