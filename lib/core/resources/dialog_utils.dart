@@ -1,59 +1,145 @@
-import 'package:evently/core/resources/colors_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogUtils {
-  static showLoadingDialog(String? loadingMessage, BuildContext context) {
+  static void showLoadingDialog(String message, BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          content: Row(
-            children: [
-              loadingMessage != null ? Text(loadingMessage) : Container(),
-              Spacer(),
-              CircularProgressIndicator(color: ColorsManager.blue),
-            ],
+      barrierDismissible: false,
+      builder:
+          (context) => AlertDialog(
+            content: Row(
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(width: 16),
+                Text(message),
+              ],
+            ),
           ),
-        );
-      },
     );
   }
 
-  static hideDialog(BuildContext context) {
+  static void hideDialog(BuildContext context) {
     Navigator.pop(context);
   }
 
   static void showDialogWithMessage(
     BuildContext context, {
     required String message,
-    String? title,
     String? positiveActionText,
-    String? negActionText,
+    String? negativeActionText,
     VoidCallback? posAction,
     VoidCallback? negAction,
   }) {
-    List<Widget> actions = [];
-    if (positiveActionText != null) {
-      actions.add(
-        TextButton(onPressed: posAction, child: Text(positiveActionText)),
-      );
-    }
-    if (negActionText != null) {
-      actions.add(
-        TextButton(onPressed: negAction, child: Text(negActionText)),
-      );
-    }
-
     showDialog(
       context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          actions: actions,
-          content: Text(message),
-          title: title != null ? Text(title) : null,
-        );
-      },
+      builder:
+          (context) => AlertDialog(
+            content: Text(message),
+            actions: [
+              if (negativeActionText != null)
+                TextButton(
+                  onPressed: () {
+                    hideDialog(context);
+                    negAction?.call();
+                  },
+                  child: Text(negativeActionText),
+                ),
+              if (positiveActionText != null)
+                TextButton(
+                  onPressed: () {
+                    hideDialog(context);
+                    posAction?.call();
+                  },
+                  child: Text(positiveActionText),
+                ),
+            ],
+          ),
+    );
+  }
+
+  static void showErrorDialog(
+    BuildContext context, {
+    required String title,
+    required String message,
+    String? actionText,
+    VoidCallback? onAction,
+  }) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  hideDialog(context);
+                  onAction?.call();
+                },
+                child: Text(actionText ?? 'OK'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  static void showSuccessDialog(
+    BuildContext context, {
+    required String message,
+    String? actionText,
+    VoidCallback? onAction,
+  }) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            icon: const Icon(Icons.check_circle, color: Colors.green),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  hideDialog(context);
+                  onAction?.call();
+                },
+                child: Text(actionText ?? 'OK'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  static void showConfirmationDialog(
+    BuildContext context, {
+    required String title,
+    required String message,
+    required String confirmText,
+    required String cancelText,
+    required VoidCallback onConfirm,
+    VoidCallback? onCancel,
+  }) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  hideDialog(context);
+                  onCancel?.call();
+                },
+                child: Text(cancelText),
+              ),
+              TextButton(
+                onPressed: () {
+                  hideDialog(context);
+                  onConfirm();
+                },
+                child: Text(confirmText),
+              ),
+            ],
+          ),
     );
   }
 }

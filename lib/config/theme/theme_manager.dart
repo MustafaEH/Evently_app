@@ -103,6 +103,11 @@ class ThemeManager {
         borderSide: BorderSide(color: ColorsManager.grey, width: 1.w),
       ),
     ),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: ColorsManager.blue,
+      selectionColor: ColorsManager.blue.withOpacity(0.3),
+      selectionHandleColor: ColorsManager.blue,
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -234,6 +239,11 @@ class ThemeManager {
         borderRadius: BorderRadius.circular(16.r),
         borderSide: BorderSide(color: ColorsManager.grey, width: 1.w),
       ),
+    ),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: ColorsManager.blue,
+      selectionColor: ColorsManager.blue.withOpacity(0.3),
+      selectionHandleColor: ColorsManager.blue,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

@@ -7,13 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventComponent extends StatelessWidget {
-  const EventComponent({
-    super.key,
-    required this.event,
-  });
+  const EventComponent({super.key, required this.event});
 
   final EventDM event;
-
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +23,15 @@ class EventComponent extends StatelessWidget {
           color: Theme.of(context).colorScheme.primaryContainer,
         ),
         borderRadius: BorderRadius.circular(16.r),
-        image: DecorationImage(
-          image: AssetImage(event.Category.imagePath!),
-        ),
+        image: DecorationImage(image: AssetImage(event.Category.imagePath!)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [EventDate(date: event.date), EventTitle(title: event.title)],
+        children: [
+          EventDate(date: event.date),
+          EventTitle(title: event.title, eventId: event.id!),
+        ],
       ),
     );
   }

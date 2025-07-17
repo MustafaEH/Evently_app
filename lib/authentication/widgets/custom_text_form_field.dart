@@ -33,6 +33,7 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       maxLines: lines,
       minLines: lines,
+      cursorColor: ColorsManager.blue,
       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
