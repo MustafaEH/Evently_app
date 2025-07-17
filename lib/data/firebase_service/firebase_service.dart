@@ -18,50 +18,153 @@ class FirebaseService {
     return eventsCollection;
   }
 
-  static addEventToFireStore(EventDM event) async {
-    CollectionReference<EventDM> eventsCollection = getEventsCollection();
+  static Future<void> addEventToFireStore(EventDM event) async {
+    try {
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      DocumentReference<EventDM> eventDoc = eventsCollection.doc();
 
-    DocumentReference<EventDM> eventDoc = eventsCollection.doc();
-    event.id = eventDoc.id;
-    eventDoc.set(event);
+      // Set creation metadata
+      final eventWithMetadata = event.copyWith(
+        id: eventDoc.id,
+        createdBy: UserDm.currentUser?.id,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      await eventDoc.set(eventWithMetadata);
+    } catch (e) {
+      throw Exception('Failed to create event: $e');
+    }
   }
 
-  static getEventsFromFireStore() async {
-    CollectionReference<EventDM> eventsCollection = getEventsCollection();
-    QuerySnapshot<EventDM> querySnapshot = await eventsCollection.get();
-    List<EventDM> events = querySnapshot.docs.map((doc) => doc.data()).toList();
-    return events;
+  static Future<void> updateEvent(EventDM event) async {
+    try {
+      if (event.id == null) {
+        throw Exception('Event ID is required for update');
+      }
+
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      final eventWithMetadata = event.copyWith(updatedAt: DateTime.now());
+
+      await eventsCollection.doc(event.id).update(eventWithMetadata.toJson());
+    } catch (e) {
+      throw Exception('Failed to update event: $e');
+    }
+  }
+
+  static Future<void> deleteEvent(String eventId) async {
+    try {
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      await eventsCollection.doc(eventId).delete();
+    } catch (e) {
+      throw Exception('Failed to delete event: $e');
+    }
+  }
+
+  static Future<List<EventDM>> getEventsFromFireStore() async {
+    try {
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      QuerySnapshot<EventDM> querySnapshot = await eventsCollection.get();
+      List<EventDM> events =
+          querySnapshot.docs.map((doc) => doc.data()).toList();
+      return events;
+    } catch (e) {
+      throw Exception('Failed to fetch events: $e');
+    }
   }
 
   static Future<List<EventDM>> getEvents() async {
-    CollectionReference<EventDM> eventsCollection = getEventsCollection();
-    var documentsSnapshots = await eventsCollection.get();
-    // documentsSnapshots.docs.map((doc) => doc.data());
-    return documentsSnapshots.docs.map((doc) => doc.data()).toList();
+    try {
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      var documentsSnapshots = await eventsCollection.get();
+      return documentsSnapshots.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch events: $e');
+    }
   }
 
   static Stream<List<EventDM>> getEventsRealTime(CategoryDM category) async* {
-    CollectionReference<EventDM> eventsCollection = getEventsCollection();
-    Stream<QuerySnapshot<EventDM>> eventDocSnapshotStream =
-        eventsCollection
-            .orderBy("date")
-            .where(
-              "categoryId",
-              isEqualTo: category.id == "1" ? null : category.id,
-            )
-            .snapshots();
-    var eventsList = eventDocSnapshotStream.map(
-      (event) => event.docs.map((docSnapshot) => docSnapshot.data()).toList(),
-    );
+    try {
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      Stream<QuerySnapshot<EventDM>> eventDocSnapshotStream =
+          eventsCollection
+              .orderBy("date")
+              .where(
+                "categoryId",
+                isEqualTo: category.id == "1" ? null : category.id,
+              )
+              .snapshots();
+      var eventsList = eventDocSnapshotStream.map(
+        (event) => event.docs.map((docSnapshot) => docSnapshot.data()).toList(),
+      );
 
-    yield* eventsList;
+      yield* eventsList;
+    } catch (e) {
+      yield [];
+    }
   }
 
-  static Future<void> addEventToFav(String eventId) {
-    UserDm currentUser = UserDm.currentUser!;
-    currentUser.favouriteEventsIds.add(eventId);
-    var usersCollection = getUserCollection();
-    return usersCollection.doc(currentUser.id).set(currentUser);
+  static Stream<List<EventDM>> getFavoriteEventsRealTime() async* {
+    try {
+      if (UserDm.currentUser == null) {
+        yield [];
+        return;
+      }
+
+      CollectionReference<EventDM> eventsCollection = getEventsCollection();
+      List<String> favoriteIds = UserDm.currentUser!.favouriteEventsIds;
+
+      if (favoriteIds.isEmpty) {
+        yield [];
+        return;
+      }
+
+      Stream<QuerySnapshot<EventDM>> eventDocSnapshotStream =
+          eventsCollection
+              .where(FieldPath.documentId, whereIn: favoriteIds)
+              .orderBy("date")
+              .snapshots();
+
+      var eventsList = eventDocSnapshotStream.map(
+        (event) => event.docs.map((docSnapshot) => docSnapshot.data()).toList(),
+      );
+
+      yield* eventsList;
+    } catch (e) {
+      yield [];
+    }
+  }
+
+  static Future<void> addEventToFav(String eventId) async {
+    try {
+      if (UserDm.currentUser == null) {
+        throw Exception('User not logged in');
+      }
+
+      UserDm currentUser = UserDm.currentUser!;
+      if (!currentUser.favouriteEventsIds.contains(eventId)) {
+        currentUser.favouriteEventsIds.add(eventId);
+        var usersCollection = getUserCollection();
+        await usersCollection.doc(currentUser.id).set(currentUser);
+      }
+    } catch (e) {
+      throw Exception('Failed to add event to favorites: $e');
+    }
+  }
+
+  static Future<void> removeEventFromFav(String eventId) async {
+    try {
+      if (UserDm.currentUser == null) {
+        throw Exception('User not logged in');
+      }
+
+      UserDm currentUser = UserDm.currentUser!;
+      currentUser.favouriteEventsIds.remove(eventId);
+      var usersCollection = getUserCollection();
+      await usersCollection.doc(currentUser.id).set(currentUser);
+    } catch (e) {
+      throw Exception('Failed to remove event from favorites: $e');
+    }
   }
 
   static Future<void> registerUser({
@@ -69,25 +172,53 @@ class FirebaseService {
     required String password,
     required String name,
   }) async {
-    final UserCredential credential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
-        );
-    UserDm user = UserDm(
-      name: name,
-      id: credential.user!.uid,
-      email: emailAddress,
-      favouriteEventsIds: [],
-    );
-    addUserToFireStore(user);
+    try {
+      final UserCredential credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailAddress,
+            password: password,
+          );
+
+      UserDm user = UserDm(
+        name: name,
+        id: credential.user!.uid,
+        email: emailAddress,
+        favouriteEventsIds: [],
+      );
+
+      await addUserToFireStore(user);
+    } catch (e) {
+      throw Exception('Failed to register user: $e');
+    }
   }
 
   static Future<void> login(String email, String password) async {
-    UserCredential credential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password);
-    UserDm userDm = await getUserFromFireStore(credential.user!.uid);
-    UserDm.currentUser = userDm;
+    try {
+      UserCredential credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      UserDm userDm = await getUserFromFireStore(credential.user!.uid);
+      UserDm.currentUser = userDm;
+    } catch (e) {
+      throw Exception('Failed to login: $e');
+    }
+  }
+
+  static Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      UserDm.currentUser = null;
+    } catch (e) {
+      throw Exception('Failed to logout: $e');
+    }
+  }
+
+  static Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception('Failed to send password reset email: $e');
+    }
   }
 
   static getUserCollection() {
@@ -102,14 +233,48 @@ class FirebaseService {
     return userCollection;
   }
 
-  static Future<void> addUserToFireStore(UserDm user) {
-    var userCollection = getUserCollection();
-    return userCollection.doc(user.id).set(user);
+  static Future<void> addUserToFireStore(UserDm user) async {
+    try {
+      var userCollection = getUserCollection();
+      await userCollection.doc(user.id).set(user);
+    } catch (e) {
+      throw Exception('Failed to add user to Firestore: $e');
+    }
   }
 
   static Future<UserDm> getUserFromFireStore(String uid) async {
-    var userCollection = getUserCollection();
-    var userDoc = await userCollection.doc(uid).get();
-    return userDoc.data()!;
+    try {
+      var userCollection = getUserCollection();
+      var userDoc = await userCollection.doc(uid).get();
+
+      if (!userDoc.exists) {
+        throw Exception('User not found');
+      }
+
+      return userDoc.data()!;
+    } catch (e) {
+      throw Exception('Failed to get user from Firestore: $e');
+    }
+  }
+
+  static Future<void> updateUserProfile({String? name, String? email}) async {
+    try {
+      if (UserDm.currentUser == null) {
+        throw Exception('User not logged in');
+      }
+
+      UserDm currentUser = UserDm.currentUser!;
+      final updatedUser = UserDm(
+        id: currentUser.id,
+        name: name ?? currentUser.name,
+        email: email ?? currentUser.email,
+        favouriteEventsIds: currentUser.favouriteEventsIds,
+      );
+
+      await addUserToFireStore(updatedUser);
+      UserDm.currentUser = updatedUser;
+    } catch (e) {
+      throw Exception('Failed to update user profile: $e');
+    }
   }
 }

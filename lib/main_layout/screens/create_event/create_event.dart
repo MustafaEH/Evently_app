@@ -66,7 +66,9 @@ class _CreateEventState extends State<CreateEvent> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16.r),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.asset(selectedCategory.imagePath ?? AssetsManager.birthDayLight),
+                  child: Image.asset(
+                    selectedCategory.imagePath ?? AssetsManager.birthDayLight,
+                  ),
                 ),
                 SizedBox(height: 6.h),
                 CustomTabBar(
@@ -172,7 +174,6 @@ class _CreateEventState extends State<CreateEvent> {
                         style: TextStyle(color: ColorsManager.blue),
                       ),
                     ),
-                    const Spacer(),
                   ],
                 ),
                 SizedBox(height: 16.h),
@@ -236,8 +237,7 @@ class _CreateEventState extends State<CreateEvent> {
 
   void _selectEventTime() async {
     selectedTime =
-        await showTimePicker(
-            context: context, initialTime: TimeOfDay.now()) ??
+        await showTimePicker(context: context, initialTime: TimeOfDay.now()) ??
         selectedTime;
 
     setState(() {});
